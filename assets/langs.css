@@ -1,0 +1,10 @@
+/* Fonts and spacing for Urdu, Malayalam and Russian (same treatment Arabic and Hindi already get). */
+html[lang="ur"] body{font-family:"Noto Naskh Arabic","IBM Plex Sans Arabic",var(--body);line-height:1.75}
+html[lang="ml"] body{font-family:"Noto Sans Malayalam",var(--body)}
+html[lang="ru"] body{font-family:"IBM Plex Sans",var(--body)}
+html[lang="ur"] :is(h1:not(.word),h2,h3){font-family:"Noto Naskh Arabic","IBM Plex Sans Arabic",sans-serif;text-transform:none}
+html[lang="ml"] :is(h1:not(.word),h2,h3){font-family:"Noto Sans Malayalam",sans-serif;text-transform:none}
+html[lang="ru"] :is(h1:not(.word),h2,h3){font-family:"IBM Plex Sans",sans-serif}
+html:is([lang="ur"],[lang="ml"],[lang="ru"]) :is(.stepno,.eyebrow,.role,.exkind,.ad-eyebrow,.kpi .lab,.idx){letter-spacing:0;font-family:inherit}
+html:is([lang="ur"],[lang="ml"]) .ad-title{font-family:inherit;text-transform:none}
+html[lang="ml"] :is(.sec b,.kpi .lab,.panel h2){word-break:break-word}

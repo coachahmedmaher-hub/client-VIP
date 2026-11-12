@@ -1,0 +1,98 @@
+/* Report page: same two worlds as the workout (black & gold / blush & rose), laid out as a training dashboard. */
+[data-g="m"],:root{--w1:#4a3a16;--w2:#7a5f1c;--w3:#b48a24;--w4:#e0ac2b;--warn:#f2b640;--chip-good:#163a24;--chip-warn:#3a2e12;--chip-bad:#3b1a17;--tipbg:#f6efdf;--tipink:#15120d}
+[data-g="f"]{--w1:#f6c9da;--w2:#ef9dbd;--w3:#e0447f;--w4:#a8306a;--warn:#a86a00;--chip-good:#e3f4e9;--chip-warn:#fdf1d6;--chip-bad:#fbe5e8;--tipbg:#3a1730;--tipink:#fff}
+body{min-height:100vh}
+.rbar{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 18px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.rbar .brand{font:700 20px/1 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.rbar .brand span{color:transparent;-webkit-text-stroke:1px var(--accent)}
+[data-g="f"] .rbar .brand{font-family:"Poppins",sans-serif;font-weight:800;letter-spacing:-.01em}
+[data-g="f"] .rbar .brand span{-webkit-text-stroke:0;color:var(--accent)}
+.rbar .lft{display:flex;gap:8px;align-items:center}
+.rhero{position:relative;overflow:hidden;background:var(--hero);border-bottom:1px solid var(--line)}
+.rhero::before{content:"";position:absolute;inset:0;pointer-events:none}
+[data-g="m"] .rhero::before{background:repeating-linear-gradient(115deg,transparent 0 46px,rgba(255,255,255,.025) 46px 48px)}
+[data-g="f"] .rhero::before{background-image:radial-gradient(circle at 1px 1px,rgba(224,68,127,.12) 1.2px,transparent 0);background-size:22px 22px}
+.rmsg{max-width:1160px;margin:0 auto;padding:40px 20px;color:var(--ink2)}
+.rmsg.err{color:var(--bad);font-weight:600}
+
+#report{position:relative}
+.wrap{max-width:1160px;margin:0 auto;padding:26px 18px 56px;display:grid;gap:18px;position:relative;z-index:1}
+.watermark{position:fixed;inset:0;pointer-events:none;z-index:5;opacity:.05}
+.top{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;padding-bottom:16px;border-bottom:2px solid var(--line)}
+.top .eyebrow{color:var(--accent)}
+.top h1{font-size:clamp(40px,6.4vw,72px);font-weight:var(--dispw);text-transform:var(--disptr);line-height:.92;margin-top:10px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
+.top h1 .lb{font-size:.5em;color:transparent;-webkit-text-stroke:1.2px var(--accent)}
+[data-g="f"] .top h1 .cn{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-g="f"] .top h1 .lb{-webkit-text-stroke:0;color:var(--accent2)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--ink2);font-size:14px;margin-top:12px}
+.meta span{display:inline-flex;align-items:center;gap:6px}
+.meta span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.weeks{display:flex;gap:6px;flex-wrap:wrap}
+.wk{width:58px;padding:9px 0 7px;text-align:center;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.wk b{display:block;font:700 22px/1 var(--display)}
+.wk small{font:600 9.5px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;color:var(--muted)}
+.wk.on{background:linear-gradient(160deg,var(--accent),var(--accent2));color:var(--accent-ink);border-color:transparent}
+.wk.on small{color:var(--accent-ink);opacity:.75}
+.wk.off{border-style:dashed;background:transparent;color:var(--muted)}
+
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:grid;gap:4px;align-content:start;position:relative;overflow:hidden}
+.kpi .lab{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+html[lang="ar"] .kpi .lab,html[lang="hi"] .kpi .lab{letter-spacing:0}
+.kpi .val{font:700 38px/1 var(--display)}
+.kpi .val small{font-size:17px;color:var(--ink2);font-weight:600;margin-inline-start:3px}
+.kpi .sub{font-size:12.5px;color:var(--ink2)}
+.kpi.hero{background:linear-gradient(150deg,var(--accent),var(--accent2));border-color:transparent;color:var(--accent-ink)}
+.kpi.hero .lab,.kpi.hero .sub,.kpi.hero .val small{color:var(--accent-ink);opacity:.8}
+.kpi.hero .chip{background:rgba(0,0,0,.14);color:var(--accent-ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;font:700 11.5px/1 var(--body);padding:4px 8px;border-radius:999px;white-space:nowrap}
+.chip.good{background:var(--chip-good);color:var(--good)}
+.chip.warn{background:var(--chip-warn);color:var(--warn)}
+.chip.crit{background:var(--chip-bad);color:var(--bad)}
+
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:calc(var(--radius) + 2px);padding:20px 20px 16px;display:grid;gap:14px;align-content:start;min-width:0}
+.panel header{display:grid;gap:5px}
+.panel h2{font-size:24px;font-weight:var(--dispw);text-transform:var(--disptr);line-height:1.05}
+[data-g="f"] .panel h2{font-size:20px}
+.panel header p{margin:0;color:var(--ink2);font-size:13.5px;max-width:62ch}
+.idx{font:600 11.5px/1 "IBM Plex Mono",monospace;color:var(--accent);letter-spacing:.12em}
+html[lang="ar"] .idx,html[lang="hi"] .idx{letter-spacing:0;font-family:inherit}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+svg.chart{display:block;width:100%;height:auto;overflow:visible;direction:ltr}
+svg.chart text{fill:var(--ink2);font-family:var(--body)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--ink2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-inline-end:6px;vertical-align:-1px}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.day{border:1px solid var(--line);background:var(--card2);border-radius:var(--radius);padding:12px 12px 8px;display:grid;gap:6px;align-content:start}
+.day .dh{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.day h3{font-size:18px;font-weight:var(--dispw);text-transform:var(--disptr)}
+[data-g="f"] .day h3{font-size:15px}
+.day .d{font:600 11px/1 "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.1em}
+.day .why{font-size:12px;color:var(--ink2);margin:0}
+.skips{display:flex;flex-wrap:wrap;gap:8px}
+.skip{border:1px solid var(--line);border-inline-start:3px solid var(--bad);border-radius:8px;padding:7px 10px;font-size:13px;background:var(--card2)}
+.skip b{font-weight:600}
+.skip span{display:block;font-size:11.5px;color:var(--muted)}
+.fix{border-radius:var(--radius);background:var(--soft);padding:14px 16px;display:grid;gap:6px}
+.fix h3{font-size:19px}
+.fix ul{margin:0;padding-inline-start:18px;color:var(--ink)}
+.tablebox{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:760px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
+html[dir="rtl"] th:nth-child(2),html[dir="rtl"] td:nth-child(2){text-align:right}
+thead th{font:700 11.5px/1.2 var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+tbody tr:hover{background:var(--card2)}
+td.dim{color:var(--muted)}
+.daytag{font:600 11px/1 "IBM Plex Mono",monospace;color:var(--accent);margin-right:6px}
+.up{color:var(--good);font-weight:700}.down{color:var(--bad);font-weight:700}
+#tip{position:fixed;pointer-events:none;background:var(--tipbg);color:var(--tipink);padding:8px 10px;border-radius:8px;font-size:12.5px;line-height:1.4;opacity:0;transition:opacity .12s;z-index:40;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.hit{cursor:pointer}
+.hit:hover .mk{filter:brightness(1.12)}
+.hit:focus{outline:none}
+.hit:focus .mk{stroke:var(--ink);stroke-width:1.5}
+@media (max-width:960px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
+@media (max-width:600px){.kpis{grid-template-columns:repeat(2,1fr)}.kpi.hero{grid-column:1/-1}.top{grid-template-columns:1fr}.kpi .val{font-size:32px}}
+@media (prefers-reduced-motion:reduce){#tip{transition:none}}
+@media print{body *{display:none!important}}

@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AM Nutrition | Coach Ahmed Maher</title>
+<meta name="description" content="نظام التغذية الخاص بعملاء كابتن أحمد ماهر — ادخل بالكود بتاعك.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#07110c">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07110c;--bg2:#030805;--surface:#0e1c15;--surface2:#13261c;--deep:#0a1510;
+  --accent:#3fcf7f;--accent-ink:#032212;--gold:#f2c36b;--fg:#eef6f1;--sub:#9db5a8;--line:#21392c;
+  --bad:#f9a4a3;--good:#6fdc9c;--glow:#3fcf7f26;
+}
+body.female{
+  --bg:#1a0f22;--bg2:#120a18;--surface:#26162f;--surface2:#2f1c3a;--deep:#1c1024;
+  --accent:#f5a3c7;--accent-ink:#3a0d24;--gold:#f6cf86;--fg:#fbf1f6;--sub:#c9b3c4;--line:#47304f;
+  --good:#f5a3c7;--glow:#f5a3c724;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:#030805}
+html:has(body.female){background:#120a18}
+body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:linear-gradient(160deg,var(--bg),var(--bg2) 60%);color:var(--fg);line-height:1.75;min-height:100vh;transition:background .35s;-webkit-user-select:none;user-select:none}
+input,select,textarea{-webkit-user-select:text;user-select:text}
+img{-webkit-user-drag:none;user-drag:none}
+button,input,select{font-family:inherit}
+.hidden{display:none!important}
+.wrap{max-width:1100px;margin:auto;padding:18px 16px 40px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;font-size:1.05rem}
+.logo{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);border-radius:12px;width:42px;height:42px;font-size:1.25rem;letter-spacing:-2px;direction:ltr;flex:none}
+.sub{color:var(--sub);font-size:.86rem;font-weight:600}
+.eyebrow{color:var(--accent);font-weight:800;font-size:.8rem;letter-spacing:.5px}
+.muted{color:var(--sub);font-size:.86rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0}
+h1{font-size:clamp(1.7rem,4.4vw,2.9rem);line-height:1.25;margin:6px 0 10px}
+h2{font-size:1.2rem;margin:0 0 10px}
+h3{font-size:1rem;margin:0}
+.btn{border:0;cursor:pointer;border-radius:11px;padding:11px 16px;font-weight:800;font-size:.95rem;transition:.15s}
+.btn:active{transform:scale(.98)}
+.primary{background:var(--accent);color:var(--accent-ink)}
+.secondary{background:var(--surface2);color:var(--fg);border:1px solid var(--line)}
+.ghost{background:transparent;color:var(--sub);border:1px solid var(--line)}
+input[type=text],input[type=number],input[type=search],select{width:100%;background:var(--deep);color:var(--fg);border:1px solid var(--line);padding:12px;border-radius:11px;font-size:1rem;outline:none}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+.warn{background:#302b1e;color:#f1dc9e;border:1px solid #79613b;border-radius:11px;padding:10px 13px;font-size:.85rem}
+
+/* ---------- Gate / landing ---------- */
+#gate .wrap{min-height:100vh;display:flex;flex-direction:column}
+.gate-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.gate-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;padding:26px 0}
+.hero-frame{position:relative;border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:0 24px 60px #0007;max-width:470px;justify-self:center;width:100%}
+.hero-frame img{display:block;width:100%;aspect-ratio:842/975;object-fit:cover;object-position:top;pointer-events:none}
+.hero-frame::after{content:"";position:absolute;inset:auto 0 0 0;height:30%;background:linear-gradient(transparent,var(--bg2))}
+.hero-badge{position:absolute;bottom:14px;right:14px;left:14px;z-index:2;display:flex;justify-content:space-between;align-items:end;gap:8px}
+.hero-badge b{font-size:1.15rem;display:block;line-height:1.3}
+.chip{display:inline-block;border:1px solid var(--line);background:#0008;border-radius:999px;padding:3px 11px;font-size:.8rem;font-weight:700;color:var(--gold)}
+.step{margin-top:22px}
+.step-label{font-weight:800;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900}
+.genders{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gender{-webkit-tap-highlight-color:transparent;outline:none;cursor:pointer;border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:16px 10px;text-align:center;transition:.2s;color:var(--fg)}
+.gender .ico{font-size:2rem;display:block;line-height:1.2}
+.gender b{display:block;font-size:1.05rem}
+.gender small{color:var(--sub)}
+.gender.on{border-color:var(--accent);background:var(--surface2);box-shadow:0 0 0 4px var(--glow)}
+.code-row{display:flex;gap:9px}
+.code-row input{text-align:center;letter-spacing:3px;font-weight:900;text-transform:uppercase;direction:ltr}
+#gateErr{color:var(--bad);font-weight:700;font-size:.9rem;min-height:1.6em;margin-top:6px}
+.feat{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.feat span{border:1px solid var(--line);border-radius:10px;padding:5px 11px;font-size:.82rem;color:var(--sub);background:var(--surface)}
+.feat b{color:var(--gold)}
+
+/* ---------- App ---------- */
+.app-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hello{display:flex;align-items:center;gap:12px;margin-top:14px}
+.hello img{width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:50% 8%;border:2px solid var(--accent);flex:none;pointer-events:none}
+.hello h1{font-size:1.45rem;margin:0}
+.daytoggle{display:inline-flex;background:var(--deep);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.daytoggle button{border:0;background:transparent;color:var(--sub);padding:7px 14px;border-radius:9px;font-weight:800;cursor:pointer;font-size:.9rem}
+.daytoggle button.on{background:var(--accent);color:var(--accent-ink)}
+.totals{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.metric{border:1px solid var(--line);background:var(--surface2);border-radius:13px;padding:10px 6px;text-align:center}
+.metric .num{font-size:1.35rem;font-weight:900;display:block;font-variant-numeric:tabular-nums;line-height:1.3}
+.metric small{color:var(--sub);font-size:.76rem;font-weight:700}
+.metric.kcal .num{color:var(--gold)}
+.metric.pro .num{color:var(--accent)}
+.tabs{position:sticky;top:0;z-index:20;display:flex;gap:6px;overflow-x:auto;padding:10px 0;margin:8px 0 0;background:linear-gradient(var(--bg) 75%,transparent);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--sub);padding:8px 14px;border-radius:999px;font-weight:800;cursor:pointer;font-size:.9rem}
+.tabs button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.meal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.meal-head .t{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.meal-time{color:var(--sub);font-size:.82rem;font-weight:700}
+.meal-kcal{color:var(--gold);font-weight:800;font-size:.85rem}
+.eat{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;font-weight:800;font-size:.85rem;color:var(--sub);background:var(--deep);flex:none}
+.eat.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.card.done{opacity:.72}
+.row{display:flex;gap:10px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.row .info{flex:1;min-width:0}
+.row .nm{font-weight:800;font-size:.98rem;line-height:1.45}
+.row .meta{display:flex;flex-wrap:wrap;gap:4px 10px;color:var(--sub);font-size:.78rem;margin-top:2px}
+.row .meta i{font-style:normal}
+.qty{text-align:center;flex:none;min-width:74px}
+.qty b{display:block;font-size:1.15rem;color:var(--accent);direction:ltr;font-variant-numeric:tabular-nums}
+.qty small{color:var(--sub);font-size:.72rem;display:block;line-height:1.3}
+.swapbtn{flex:none;border:1px solid var(--line);background:var(--surface2);color:var(--fg);border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:800;font-size:.82rem}
+.swapped-tag{display:inline-block;margin-top:3px;font-size:.75rem;color:var(--gold);font-weight:700}
+.swapped-tag a{color:var(--sub);text-decoration:underline;cursor:pointer;margin-inline-start:6px}
+.badge{display:inline-block;font-size:.7rem;border-radius:7px;padding:0 7px;border:1px solid var(--line);color:var(--sub);background:var(--deep);font-weight:700}
+.badge.state{color:#cfe3f3}
+.note{font-size:.78rem;color:var(--gold);margin-top:2px}
+.water{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cup{width:34px;height:40px;border-radius:6px 6px 10px 10px;border:2px solid var(--line);background:var(--deep);cursor:pointer;position:relative;overflow:hidden;padding:0}
+.cup.on{border-color:var(--accent)}
+.cup.on::after{content:"";position:absolute;inset:30% 0 0 0;background:var(--accent);opacity:.75}
+.supp{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.supp:first-of-type{border-top:0}
+.supp .ico{font-size:1.5rem;flex:none;width:40px;text-align:center}
+.supp .info{flex:1}
+.supp .info b{display:block}
+.slot-title{font-weight:900;color:var(--accent);margin:4px 0 0;font-size:.9rem}
+.shop-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.shop-row:first-child{border-top:0}
+.shop-row b{direction:ltr;color:var(--accent);white-space:nowrap}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.links a{text-decoration:none}
+ul.tips{margin:0;padding-inline-start:20px}
+ul.tips li{margin:5px 0}
+.pillset{display:flex;flex-wrap:wrap;gap:7px}
+.pill{border:1px solid var(--line);background:var(--deep);color:var(--sub);border-radius:9px;padding:7px 13px;cursor:pointer;font-weight:800;font-size:.88rem}
+.pill.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.calc-grid{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.alt{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--deep);border-radius:13px;padding:11px;margin-top:8px;cursor:pointer;text-align:start;width:100%;color:var(--fg)}
+.alt:hover{border-color:var(--accent)}
+.alt.cur{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+.alt .info{flex:1;min-width:0}
+.alt .nm{font-weight:800}
+.alt .macros{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:.78rem;color:var(--sub)}
+.diff{font-size:.75rem;font-weight:800}
+.diff.ok{color:var(--good)}.diff.mid{color:var(--gold)}.diff.bad{color:var(--bad)}
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;background:#000a;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:22px 22px 0 0;width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column}
+.sheet-head{padding:16px 16px 10px;border-bottom:1px solid var(--line)}
+.sheet-body{padding:6px 16px 20px;overflow-y:auto}
+.sheet-head .x{float:inline-end;background:var(--surface2);border:1px solid var(--line);color:var(--fg);border-radius:10px;width:36px;height:36px;font-size:1.1rem;cursor:pointer}
+@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:22px}}
+footer{border-top:1px solid var(--line);margin-top:26px;padding-top:16px;color:var(--sub);font-size:.82rem;text-align:center}
+footer a{color:var(--accent);text-decoration:none;font-weight:700}
+.legal{font-size:.75rem;opacity:.85;margin-top:8px}
+
+.qin{width:76px!important;padding:6px 4px!important;text-align:center;font-weight:900;font-size:1.05rem!important;color:var(--accent)!important;direction:ltr}
+.qty .reset{display:block;font-size:.68rem;color:var(--sub);text-decoration:underline;cursor:pointer;margin-top:2px}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px}
+.mgrid label{font-size:.7rem;color:var(--sub);text-align:center}
+.mgrid input{padding:6px 2px!important;text-align:center;direction:ltr;font-size:.92rem!important}
+.lbl-form{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:6px}
+.lbl-form label{font-size:.68rem;color:var(--sub);text-align:center;display:block}
+.lbl-form input{padding:6px 2px!important;text-align:center;direction:ltr;font-size:.9rem!important}
+.tgt{font-size:.72rem;color:var(--sub);display:block;line-height:1.35;margin-top:2px}
+.tgt.off{color:var(--gold)}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.bgrid .metric .num{font-size:1.25rem}
+.erow{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:.92rem}
+.erow:first-child{border-top:0}
+.erow b{white-space:nowrap}
+.tag{font-size:.68rem;border-radius:6px;padding:0 6px;margin-inline-start:6px;font-weight:800}
+.tag.est{background:#4b3920;color:#fae5b1}.tag.meas{background:#153e2a;color:#bdf3d2}.tag.tgt2{background:var(--accent);color:var(--accent-ink)}
+.wlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.wlist span{border:1px solid var(--line);background:var(--deep);border-radius:9px;padding:3px 9px;font-size:.82rem;direction:ltr}
+.wlist span a{color:var(--bad);cursor:pointer;margin-inline-start:6px;text-decoration:none}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.fgrid label{font-size:.8rem;color:var(--sub);display:block;margin-bottom:3px}
+#loading{color:var(--sub);font-size:.9rem}
+@media(max-width:820px){
+  .gate-grid{grid-template-columns:1fr;gap:18px;padding-top:16px}
+  .hero-frame{max-width:380px}
+  .gate-text{order:2}
+  .calc-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .totals{gap:5px}.metric .num{font-size:1.1rem}
+  .row{gap:8px}.qty{min-width:62px}
+  .swapbtn{padding:7px 8px}
+}
+@media print{.tabs,.swapbtn,.eat,footer .legal{display:none}}
+html[lang="ur"] body{font-family:"Noto Naskh Arabic","Cairo",sans-serif}
+html[lang="hi"] body{font-family:"Noto Sans Devanagari","Cairo",sans-serif}
+html[lang="ml"] body{font-family:"Noto Sans Malayalam","Cairo",sans-serif}
+.langsel option{color:#111;background:#fff}
+select.langsel{width:auto;appearance:none;-webkit-appearance:none;cursor:pointer;font:inherit;font-size:.82rem;font-weight:700;padding:7px 30px 7px 12px;border-radius:999px;background:#0008 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3Z'/%3E%3C/svg%3E") no-repeat right 11px center;color:var(--gold)}
+html[dir="rtl"] select.langsel{padding:7px 12px 7px 30px;background-position:left 11px center}
+.gate-top{flex-wrap:wrap}
+.hdr-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-inline-start:auto}
+</style>
+</head>
+<body>
+
+<!-- ================= GATE ================= -->
+<section id="gate">
+  <div class="wrap">
+    <div class="gate-top">
+      <div class="brand"><div class="logo">AM</div><div>AM NUTRITION<div class="sub">Coach Ahmed Maher</div></div></div>
+      <div class="hdr-tools"><select class="langsel" aria-label="Language"></select><a class="chip" href="../index.html" style="text-decoration:none" data-i18n="menuMain">↩ القائمة الرئيسية</a></div>
+    </div>
+    <div class="gate-grid">
+      <div class="hero-frame">
+        <img src="assets/coach-hero.jpg" alt="Coach Ahmed Maher" draggable="false">
+        <div class="hero-badge"><div><b data-i18n="coachName">كابتن أحمد ماهر</b><span class="sub" data-i18n="heroSub">تغذية رياضية • متابعة شخصية</span></div></div>
+      </div>
+      <div class="gate-text">
+        <div class="eyebrow" data-i18n="gEyebrow">نظامك الغذائي • معمول ليك أنت بس</div>
+        <h1 data-i18n="gH1">أكلك محسوب بالجرام<br><span style="color:var(--accent)">والبديل جاهز في كل وجبة.</span></h1>
+        <p class="muted" style="font-size:.95rem" data-i18n="gLead">مش عاجبك صنف؟ بدّله بأي بديل وهيتحسبلك الجرامات الصح على طول، من غير ما يتغير هدفك.</p>
+
+        <div class="step">
+          <div class="step-label"><span class="step-num">1</span> <span data-i18n="gPick">اختار</span></div>
+          <div class="genders">
+            <button type="button" class="gender" data-g="male"><span class="ico">🧔🏻‍♂️</span><b data-i18n="man">راجل</b></button>
+            <button type="button" class="gender" data-g="female"><span class="ico">👩🏻</span><b data-i18n="woman">ست</b></button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-label"><span class="step-num">2</span> <span data-i18n="gCode">اكتب الكود بتاعك</span></div>
+          <form class="code-row" id="codeForm" autocomplete="off">
+            <input type="text" id="codeIn" placeholder="CODE" maxlength="24" aria-label="Code">
+            <button class="btn primary" type="submit" id="goBtn" data-i18n="enter">دخول</button>
+          </form>
+          <div id="gateErr"></div>
+          <div class="muted" data-i18n="gSame">نفس الكود اللي بتدخل بيه موقع التمارين والريبورت.</div>
+        </div>
+        <div class="feat"><span data-i18n="f1">🔄 <b>بدائل</b> محسوبة</span><span data-i18n="f2">💊 المكملات والفيتامينات</span><span data-i18n="f3">🛒 قائمة مشتريات</span><span data-i18n="f4">💧 متابعة المية</span></div>
+      </div>
+    </div>
+    <footer>
+      <div><span data-i18n="coachName">كابتن أحمد ماهر</span> • <a href="https://wa.me/971562723518" target="_blank" rel="noopener" data-i18n="waNum">واتساب 0562723518</a> • <a href="https://instagram.com/coach.ahmed.maher" target="_blank" rel="noopener">@coach.ahmed.maher</a></div>
+      <div class="legal" data-i18n="legal1">© جميع الحقوق محفوظة لكابتن أحمد ماهر. المحتوى خاص بالعميل صاحب الكود، وممنوع نسخه أو تحميله أو مشاركته.</div>
+    </footer>
+  </div>
+</section>
+
+<!-- ================= APP ================= -->
+<section id="app" class="hidden">
+  <div class="wrap">
+    <div class="app-top">
+      <div class="brand"><div class="logo">AM</div><div>AM NUTRITION<div class="sub">Coach Ahmed Maher</div></div></div>
+      <div class="hdr-tools"><select class="langsel" aria-label="Language"></select><button class="btn ghost" id="logout" type="button" data-i18n="menu">↩ القائمة</button></div>
+    </div>
+    <div class="hello">
+      <img src="assets/coach-hero.jpg" alt="" draggable="false">
+      <div><div class="eyebrow" id="goal"></div><h1 id="hi"></h1><div class="muted" id="updated"></div></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0" data-i18n="totalT">إجمالي اليوم</h2>
+        <div class="daytoggle hidden" id="dayToggle"></div>
+      </div>
+      <div class="totals" id="totals"></div>
+      <div class="muted" id="eatenLine" style="margin-top:8px"></div>
+    </div>
+
+    <nav class="tabs" id="tabs">
+      <button data-t="plan" class="on" data-i18n="tPlan">🍽️ وجباتي</button>
+      <button data-t="supp" data-i18n="tSupp">💊 المكملات</button>
+      <button data-t="body" class="hidden" id="bodyTab" data-i18n="tBody">📋 تحليل الجسم</button>
+      <button data-t="shop" data-i18n="tShop">🛒 المشتريات</button>
+      <button data-t="calc" data-i18n="tCalc">🔄 حاسبة البدائل</button>
+      <button data-t="more" data-i18n="tMore">📌 نصايح ومتابعة</button>
+    </nav>
+
+    <div id="t-plan"></div>
+    <div id="t-supp" class="hidden"></div>
+    <div id="t-body" class="hidden"></div>
+    <div id="t-shop" class="hidden"></div>
+    <div id="t-calc" class="hidden"></div>
+    <div id="t-more" class="hidden"></div>
+
+    <footer>
+      <div><span data-i18n="coachName">كابتن أحمد ماهر</span> • <a href="https://wa.me/971562723518" target="_blank" rel="noopener" data-i18n="waNum">واتساب 0562723518</a> • <a href="https://instagram.com/coach.ahmed.maher" target="_blank" rel="noopener">@coach.ahmed.maher</a></div>
+      <div class="legal" data-i18n="legal2">القيم الغذائية تقريبية ومحسوبة لكل 100 جم حسب حالة الأكل المكتوبة (نيئ/مطبوخ). النظام والجرعات معمولين للعميل ده بالذات — متنقلهمش لحد تاني.<br>© جميع الحقوق محفوظة لكابتن أحمد ماهر. ممنوع النسخ أو التحميل أو المشاركة.</div>
+    </footer>
+  </div>
+</section>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <div class="sheet-head">
+      <button class="x" id="mClose" type="button" data-i18n-aria="close" aria-label="Close">✕</button>
+      <div class="eyebrow" data-i18n="pickAlt">اختار بديل</div>
+      <h2 id="mTitle" style="margin:2px 0 4px"></h2>
+      <div class="muted" id="mBasis"></div>
+      <input type="search" id="mSearch" data-i18n-ph="searchPh" placeholder="دوّر على صنف..." style="margin-top:8px">
+    </div>
+    <div class="sheet-body" id="mBody"></div>
+  </div>
+</div>
+
+<script src="data/foods.js?v=13"></script>
+<script src="lang/ar.js?v=13"></script>
+<script src="lang/en.js?v=13"></script>
+<script src="lang/ur.js?v=13"></script>
+<script src="lang/hi.js?v=13"></script>
+<script src="lang/ml.js?v=13"></script>
+<script src="lang/fil.js?v=13"></script>
+<script src="lang/fr.js?v=13"></script>
+<script src="lang/de.js?v=13"></script>
+<script src="lang/ru.js?v=13"></script>
+<script src="data/clients.enc.js?v=13"></script>
+<script src="data/supplements.js?v=13"></script>
+<script src="data/links.js?v=13"></script>
+<script src="app.js?v=13"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-g="m">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0907">
+<title>My Report · Coach Ahmed Maher</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Poppins:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=13">
+<link rel="stylesheet" href="assets/langs.css?v=13">
+<link rel="stylesheet" href="assets/report/report.css?v=13">
+<script>try{var h=JSON.parse(sessionStorage.getItem("am-hub")||"{}"),g=h.g||localStorage.getItem("amw-g");if(g)document.documentElement.dataset.g=g;}catch(e){}</script>
+</head>
+<body>
+<div class="rbar">
+  <div class="lft"><a class="pill" href="index.html" id="menu">← Menu</a><span class="brand" dir="ltr">Ahmed <span>Maher</span></span></div>
+  <div class="langwrap">
+    <button type="button" class="pill" id="globe" aria-haspopup="true" aria-expanded="false" aria-controls="langmenu">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3Z"/></svg>
+      <span id="langname">English</span>
+    </button>
+    <div class="langmenu" id="langmenu" role="menu" hidden></div>
+  </div>
+</div>
+<div class="rhero"><main id="report"><p class="rmsg" id="rmsg">…</p></main></div>
+<div id="tip" role="tooltip"></div>
+
+<script src="assets/config.js?v=13"></script>
+<script>window.SITE.key = "am-reports-v1";</script>
+<script src="assets/report/i18n.js?v=13"></script>
+<script src="assets/i18n-more.js?v=13"></script>
+<script src="assets/report/i18n-more.js?v=13"></script>
+<script src="assets/crypto.js?v=13"></script>
+<script src="assets/report/report.js?v=13"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id), T = I18N.t, html = document.documentElement;
+  let hub = {}, data = null;
+  try { hub = JSON.parse(sessionStorage.getItem("am-hub")) || {}; } catch (e) {}
+  function draw() { if (data) Report.render($("report"), data, () => location.href = "index.html"); }
+  function apply() {
+    const l = I18N.lang; html.lang = l; html.dir = I18N.dir();
+    $("menu").textContent = T("menu"); $("langname").textContent = I18N.langs[l]._name;
+    $("langmenu").innerHTML = I18N.order.map(k => `<button type="button" role="menuitemradio" aria-checked="${k === l}" data-l="${k}" lang="${k}" dir="${I18N.langs[k]._dir}">${I18N.langs[k]._name}${k === l ? " ✓" : ""}</button>`).join("");
+    draw();
+  }
+  const menu = $("langmenu"), globe = $("globe");
+  globe.addEventListener("click", e => { e.stopPropagation(); menu.hidden = !menu.hidden; globe.setAttribute("aria-expanded", String(!menu.hidden)); });
+  menu.addEventListener("click", e => { const b = e.target.closest("button[data-l]"); if (!b) return; I18N.set(b.dataset.l); menu.hidden = true; apply(); });
+  document.addEventListener("click", e => { if (!e.target.closest(".langwrap")) menu.hidden = true; });
+  document.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && ["s", "p", "c"].includes(e.key.toLowerCase())) e.preventDefault(); });
+  apply();
+  if (!hub.code) { location.replace("index.html"); return; }
+  $("rmsg").textContent = T("msgChecking");
+  (async () => {
+    try {
+      const c = Vault.normCode(hub.code), id = await Vault.reportId(c);
+      const res = await fetch("reports/" + id + ".json", { cache: "no-store" });
+      if (!res.ok) throw 0;
+      data = await Vault.decryptReport(c, await res.json());
+      draw();
+    } catch (e) { $("rmsg").className = "rmsg err"; $("rmsg").textContent = T("msgNotFound"); }
+  })();
+})();
+</script>
+</body>
+</html>
