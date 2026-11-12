@@ -14,10 +14,27 @@
   try { st.g = st.g || localStorage.getItem("amw-g") || null; } catch (e) {}
   const save = () => { try { sessionStorage.setItem("am-hub", JSON.stringify(st)); if (st.g) localStorage.setItem("amw-g", st.g); } catch (e) {} };
 
+  const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  async function aes(pass, salt, iter, iv, data) {
+    const base = await crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: unb64(salt), iterations: iter, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(iv) }, key, unb64(data))));
+  }
+  const gOf = v => { v = String(v || "").toLowerCase(); return v[0] === "f" || v === "female" ? "f" : v[0] === "m" ? "m" : ""; };
+  // A section opens only when the code exists there AND it belongs to the gender chosen on step 1.
   async function has(sec, code) {
-    if (sec === "n") return !!(window.AM_VAULT || {})[await sha("amn-v1:" + code)];
-    const id = (await sha(KEYS[sec] + "|id|" + code)).slice(0, 24);
-    try { const r = await fetch((sec === "w" ? "workouts/" : "reports/") + id + ".json", { method: "GET", cache: "no-store" }); return r.ok; } catch (e) { return false; }
+    try {
+      let o;
+      if (sec === "n") {
+        const e = (window.AM_VAULT || {})[await sha("amn-v1:" + code)]; if (!e) return false;
+        o = await aes(code, e.s, window.AM_VAULT_ITER || 200000, e.i, e.d);
+      } else {
+        const id = (await sha(KEYS[sec] + "|id|" + code)).slice(0, 24);
+        const r = await fetch((sec === "w" ? "workouts/" : "reports/") + id + ".json", { cache: "no-store" }); if (!r.ok) return false;
+        const f = await r.json(); o = await aes(KEYS[sec] + "|" + code, f.salt, 250000, f.iv, f.data);
+      }
+      return gOf(o.gender) === st.g;
+    } catch (e) { return false; }
   }
 
   const ICON = { m: '<svg width="15" height="15" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"><circle cx="20" cy="28" r="12"/><path d="M29 19 41 7M30 7h11v11"/></svg>',
@@ -57,13 +74,13 @@
       const others = [];
       for (const s of ["w", "n", "r"]) if (s !== sec && await has(s, code)) others.push(T(NAME[s]));
       if (others.length) { st.code = code; save(); msg("", T("notThis", { sec: T(NAME[sec]) }) + " " + T("haveOther", { list: others.join(" · ") })); }
-      else msg("", T("msgNotFound"));
+      else msg("", T("codeNF"));
     } finally { btn.disabled = false; }
   }
 
   /* events */
   document.querySelectorAll(".gbtn").forEach(b => b.addEventListener("click", () => {
-    if (st.g && st.g !== b.dataset.gender) { delete st.code; $("code").value = ""; }   // other gender = probably another person: forget the last code
+    if (st.g && st.g !== b.dataset.gender) { delete st.code; $("code").value = ""; }   // other gender = another person: forget the last code
     setGender(b.dataset.gender); show("st2");
   }));
   document.querySelectorAll(".sec").forEach(b => b.addEventListener("click", () => {

@@ -167,6 +167,7 @@ function tryLogin(code,silent){
   busy=true; err.textContent=""; $("#goBtn").textContent=T("wait");
   openVault(c).then(function(cl){
     busy=false; $("#goBtn").textContent=T("enter");
+    if(cl && cl.gender && S.gender && cl.gender!==S.gender) cl=null;   // a man's code doesn't open under "woman" and the reverse
     if(!cl){ if(!silent) err.textContent=T("errNF"); return; }
     S.code=c; S.client=cl; EXCL={};
     (cl.extraFoods||[]).forEach(function(x){ if(!F[x.id]){F[x.id]=x; FOODS.push(x);} });

@@ -9,9 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=14">
-<link rel="stylesheet" href="assets/langs.css?v=13">
-<link rel="stylesheet" href="assets/report/report.css?v=13">
+<link rel="stylesheet" href="assets/style.css?v=15">
+<link rel="stylesheet" href="assets/langs.css?v=15">
+<link rel="stylesheet" href="assets/report/report.css?v=15">
 <style>
   body{-webkit-user-select:auto;user-select:auto}
   .adm{max-width:860px;margin:0 auto;padding:28px 20px;display:grid;gap:18px;font-family:"IBM Plex Sans Arabic",var(--body)}
@@ -46,6 +46,7 @@
       <input type="file" id="file" accept=".xlsx"><small>افتح الملف في Excel واعمله Save الأول، عشان الأرقام تبقى محسوبة جواه.</small></div>
     <div class="two">
       <div class="row"><label for="client">اسم العميل (هيظهر في التقرير)</label><input id="client" class="ltr" placeholder="Hani"></div>
+      <div class="row"><label for="gender">العميل</label><select id="gender"><option value="m">راجل</option><option value="f">ست</option></select><small>التقرير مش هيفتح غير لو العميل اختار نفس النوع في الموقع.</small></div>
       <div class="row"><label for="code">كود العميل</label>
         <div style="display:flex;gap:8px"><input id="code" class="ltr" style="flex:1" placeholder="HANI-7K4Q2M"><button class="btn alt" id="gen" type="button">كود جديد</button></div>
         <small>نفس الكود = نفس الملف. لو عملت تقرير جديد بنفس الكود، هيستبدل القديم.</small></div>
@@ -74,15 +75,15 @@
 <main id="report" hidden></main>
 <div id="tip" role="tooltip"></div>
 
-<script src="assets/config.js?v=13"></script>
+<script src="assets/config.js?v=15"></script>
 <script>window.SITE.key = "am-reports-v1";</script>
-<script src="assets/report/i18n.js?v=13"></script>
-<script src="assets/i18n-more.js?v=13"></script>
-<script src="assets/report/i18n-more.js?v=13"></script>
-<script src="assets/crypto.js?v=13"></script>
-<script src="assets/report/xlsx-lite.js?v=13"></script>
-<script src="assets/report/parse.js?v=13"></script>
-<script src="assets/report/report.js?v=13"></script>
+<script src="assets/report/i18n.js?v=15"></script>
+<script src="assets/i18n-more.js?v=15"></script>
+<script src="assets/report/i18n-more.js?v=15"></script>
+<script src="assets/crypto.js?v=15"></script>
+<script src="assets/report/xlsx-lite.js?v=15"></script>
+<script src="assets/report/parse.js?v=15"></script>
+<script src="assets/report/report.js?v=15"></script>
 <script>
 (function () {
   const $ = id => document.getElementById(id);
@@ -109,7 +110,7 @@
     if (!parsed) { err("اختار ملف المدرب الأول."); return null; }
     if (!$("client").value.trim()) { err("اكتب اسم العميل."); return null; }
     err();
-    return { ...parsed, client: $("client").value.trim(), label: $("label").value.trim(), subtitle: $("subtitle").value.trim(),
+    return { ...parsed, client: $("client").value.trim(), gender: $("gender").value, label: $("label").value.trim(), subtitle: $("subtitle").value.trim(),
       emptyNote: $("empty").value.trim(), notesTitle: $("notesTitle").value.trim(),
       notes: $("notes").value.split("\n").map(s => s.trim()).filter(Boolean),
       date: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) };
