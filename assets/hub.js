@@ -62,10 +62,13 @@
   }
 
   /* events */
-  document.querySelectorAll(".gbtn").forEach(b => b.addEventListener("click", () => { setGender(b.dataset.gender); show("st2"); }));
+  document.querySelectorAll(".gbtn").forEach(b => b.addEventListener("click", () => {
+    if (st.g && st.g !== b.dataset.gender) { delete st.code; $("code").value = ""; }   // other gender = probably another person: forget the last code
+    setGender(b.dataset.gender); show("st2");
+  }));
   document.querySelectorAll(".sec").forEach(b => b.addEventListener("click", () => {
     st.sec = b.dataset.sec; save(); $("secname").textContent = T(NAME[st.sec]); msg("", "");
-    if (st.code) { $("code").value = st.code; $("other").hidden = false; show("st3"); openSec(st.sec, st.code); }
+    if (st.code) { $("code").value = st.code; $("other").hidden = false; show("st3"); $("go").focus({ preventScroll: true }); }
     else { $("other").hidden = true; show("st3"); $("code").focus({ preventScroll: true }); }
   }));
   document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => { msg("", ""); show(b.dataset.back); }));
