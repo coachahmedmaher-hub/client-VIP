@@ -220,7 +220,8 @@ body.inwork .band-in{display:none}
 [data-g="m"] .coachpic img{filter:saturate(1.05) contrast(1.05)}
 [data-g="m"] .coachpic::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,transparent 28%)}
 [data-g="f"] .coachpic img{filter:grayscale(1) contrast(1.08) brightness(1.08);mix-blend-mode:multiply;opacity:.55}
-.bar-top,.band-in{z-index:2}
+.band-in{z-index:2}
+.bar-top{z-index:30}
 .band-in>div:first-child{position:relative}
 .word{text-shadow:0 4px 30px rgba(0,0,0,.35)}
 [data-g="m"] .panel{background:color-mix(in srgb,#15120d 82%,transparent);border-color:#3a3220}
