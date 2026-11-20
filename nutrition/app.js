@@ -10,7 +10,7 @@ var F={}; FOODS.forEach(function(x){F[x.id]=x;});
 var NL=window.NL||{}, ORDER=["ar","en","ur","hi","ml","fil","fr","de","ru"].filter(function(k){return NL[k];});
 var LANG=(function(){var s=null;try{s=localStorage.getItem("amw-lang");}catch(e){} if(s&&NL[s]) return s; var n=(navigator.language||"ar").toLowerCase(); var m={ar:"ar",ur:"ur",hi:"hi",ml:"ml",fil:"fil",tl:"fil",fr:"fr",de:"de",ru:"ru",en:"en"}; return m[n.slice(0,3)]||m[n.slice(0,2)]||"ar";})();
 function T(k,v){var L=NL[LANG]||{}, s=L[k]!=null?L[k]:(NL.en&&NL.en[k]!=null?NL.en[k]:(NL.ar[k]!=null?NL.ar[k]:k)); if(v) for(var x in v) s=String(s).split("{"+x+"}").join(v[x]); return s;}
-function FN(f){var m=(NL[LANG]||{}).foods; if(m&&m[f.id]) return m[f.id]; if(LANG!=="ar"&&/^SP\d/.test(f.id)){var e=f.n.replace(/[\u0600-\u06FF][\s\S]*$/,"").trim(); if(e) return e;} return f.n;}
+function FN(f){if(f.nl) return f.nl[LANG]||f.nl.en||f.n; var m=(NL[LANG]||{}).foods; if(m&&m[f.id]) return m[f.id]; if(LANG!=="ar"&&/^SP\d/.test(f.id)){var e=f.n.replace(/[\u0600-\u06FF][\s\S]*$/,"").trim(); if(e) return e;} return f.n;}
 function ST(s){var m=(NL[LANG]||{}).states; return (m&&m[s])||s;}
 function SUPT(x){var m=((NL[LANG]||{}).supp||{})[x.id]||{}; var o={}; for(var k in x) o[k]=x[k]; for(var j in m) o[j]=m[j]; return o;}
 function match(f,q){q=q.toLowerCase(); return FN(f).toLowerCase().indexOf(q)>-1||f.n.toLowerCase().indexOf(q)>-1||(NL.en&&NL.en.foods&&(NL.en.foods[f.id]||"").toLowerCase().indexOf(q)>-1);}
@@ -21,7 +21,11 @@ function applyLang(){
   $$("[data-i18n-aria]").forEach(function(el){el.setAttribute("aria-label",T(el.dataset.i18nAria));});
   $$(".langsel").forEach(function(sel){sel.innerHTML=ORDER.map(function(k){return '<option value="'+k+'"'+(k===LANG?' selected':'')+'>'+NL[k]._name+'</option>';}).join("");});
 }
-function setLang(l){ if(!NL[l]) return; LANG=l; try{localStorage.setItem("amw-lang",l);}catch(e){} applyLang(); if(S.client) renderApp(); }
+function setLang(l){ if(!NL[l]) return; LANG=l; try{localStorage.setItem("amw-lang",l);}catch(e){} applyLang(); if(S.client){ S.client=locC(S.client0); renderApp(); } }
+/* a client's own texts (meal names, notes, tips…) follow the chosen language when the plan carries translations */
+function locC(o){ if(!o||!o.i18n) return o; var d=o.i18n[LANG]||{};
+  return (function m(v){ if(typeof v==="string") return d[v]!=null?d[v]:v; if(Array.isArray(v)) return v.map(m);
+    if(v&&typeof v==="object"){ var r={}; for(var k in v) r[k]=(k==="i18n"||k==="extraFoods")?v[k]:m(v[k]); return r; } return v; })(o); }
 
 /* ---------- helpers ---------- */
 function $(s,r){return (r||document).querySelector(s);}
@@ -82,7 +86,15 @@ function load(){var s=store(skey())||{};
   var keys=Object.keys(S.log).sort(); while(keys.length>14){delete S.log[keys.shift()];}
 }
 function dayLog(){var t=today(); if(!S.log[t]) S.log[t]={meals:{},water:0,supp:{}}; return S.log[t];}
-function dayPlan(){var d=S.client.days||{}; return d[S.dayType]||d.train||d[Object.keys(d)[0]];}
+function rawDay(){var d=S.client.days||{}; return d[S.dayType]||d.train||d[Object.keys(d)[0]];}
+function varSel(mi){var v=bucket(S.opt)["v"+mi]; return v==null?0:+v;}
+function dayPlan(){   // a meal can offer variants (breakfast A / B): the chosen one becomes the meal's items
+  var p=rawDay(); if(!(p.meals||[]).some(function(m){return m.variants;})) return p;
+  var o={}; for(var k in p) o[k]=p[k];
+  o.meals=p.meals.map(function(m,mi){ if(!m.variants) return m; var vi=Math.min(varSel(mi),m.variants.length-1), v=m.variants[vi], r={};
+    for(var x in m) r[x]=m[x]; r.items=v.items; r.vi=vi; if(v.note) r.note=v.note; return r; });
+  return o;
+}
 function bucket(o){return o[S.dayType]||(o[S.dayType]={});}
 function excluded(f){return !!EXCL[f.id];}
 
@@ -169,10 +181,11 @@ function tryLogin(code,silent){
     busy=false; $("#goBtn").textContent=T("enter");
     if(cl && cl.gender && S.gender && cl.gender!==S.gender) cl=null;   // a man's code doesn't open under "woman" and the reverse
     if(!cl){ if(!silent) err.textContent=T("errNF"); return; }
-    S.code=c; S.client=cl; EXCL={};
+    S.code=c; S.client0=cl; S.client=locC(cl); EXCL={};
     (cl.extraFoods||[]).forEach(function(x){ if(!F[x.id]){F[x.id]=x; FOODS.push(x);} });
     (cl.exclude||[]).forEach(function(id){EXCL[id]=1;});
     load(); store("amn:code",c);
+    var wd=["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()]; if(cl.days&&cl.days[wd]) S.dayType=wd;   // weekly plans open on today
     $("#gate").classList.add("hidden"); $("#app").classList.remove("hidden"); window.scrollTo(0,0);
     renderApp();
   }).catch(function(){ busy=false; $("#goBtn").textContent=T("enter"); if(!silent) err.textContent=T("errFail"); });
@@ -206,7 +219,7 @@ function planTotals(onlyEaten){
   return t;
 }
 function renderTotals(){
-  var t=planTotals(false), e=planTotals(true), TG=S.client.targets;
+  var t=planTotals(false), e=planTotals(true), TG=dayPlan().targets||S.client.targets;
   function card(cls,key,label){
     if(TG){
       var tv=TG[key], pv=t[key], off=Math.abs(pv-tv)>tv*0.05;
@@ -217,7 +230,7 @@ function renderTotals(){
   $("#totals").innerHTML=card("kcal","k",T("kcal"))+card("pro","p",T("mPro"))+card("","c",T("mCarb"))+card("","f",T("mFat"));
   var line="";
   if(TG){
-    line=(S.client.targets_note?esc(S.client.targets_note)+"<br>":"");
+    var tn=dayPlan().targets_note||S.client.targets_note; line=(tn?esc(tn)+"<br>":"");
     if(e.k>0) line+=T("eatenLeft",{k:"<b style='color:var(--gold)'>"+r0(e.k)+"</b>",lk:r0(TG.k-e.k),lp:r0(TG.p-e.p),lc:r0(TG.c-e.c),lf:r0(TG.f-e.f)});
     else line+=T("eatenHint");
   } else line= e.k>0 ? T("eatenSoFar",{k:"<b style='color:var(--gold)'>"+r0(e.k)+"</b>",p:r0(e.p)}) : T("eatenHint2");
@@ -275,6 +288,7 @@ function renderPlan(){
     var done=!!log.meals[S.dayType+":"+mi];
     h+='<div class="card'+(done?' done':'')+'"><div class="meal-head"><div class="t"><h3>'+esc(m.name)+'</h3>'+(m.time?'<span class="meal-time">🕒 '+esc(m.time)+'</span>':'')+'<span class="meal-kcal" data-mealk="'+mi+'"></span></div>'+
        '<button type="button" class="eat'+(done?' on':'')+'" data-eat="'+mi+'">'+(done?T("eatOn"):T("eatOff"))+'</button></div>'+
+       (m.variants?'<div class="variants">'+m.variants.map(function(v,vi){return '<button type="button" class="pill'+(vi===m.vi?' on':'')+'" data-var="'+mi+':'+vi+'">'+esc(v.label)+'</button>';}).join("")+'</div>':'')+
        m.items.map(function(it,ii){return itemRow(mi,ii,it);}).join("")+
        (m.note?'<div class="note" style="margin-top:6px">💡 '+esc(m.note)+'</div>':'')+'</div>';
   });
@@ -286,6 +300,11 @@ function renderPlan(){
   var el=$("#t-plan"); el.innerHTML=h;
   $$("[data-eat]",el).forEach(function(b){b.onclick=function(){var k=S.dayType+":"+b.dataset.eat, l=dayLog(); if(l.meals[k]) delete l.meals[k]; else l.meals[k]=1; save(); renderPlan(); renderTotals();};});
   $$("[data-swap]",el).forEach(function(b){b.onclick=function(){var a=b.dataset.swap.split("-"); openSwap(+a[0],+a[1]);};});
+  $$("[data-var]",el).forEach(function(b){b.onclick=function(){
+    var a=b.dataset.var.split(":"), mi=a[0];
+    [S.swaps,S.grams].forEach(function(o){var bk=bucket(o); Object.keys(bk).forEach(function(k){ if(k.split("-")[0]===mi) delete bk[k]; });});   // a swap or gram change belonged to the other variant
+    bucket(S.opt)["v"+mi]=+a[1]; save(); rerenderAll();
+  };});
   $$("[data-reset]",el).forEach(function(b){b.onclick=function(){delete bucket(S.swaps)[b.dataset.reset]; save(); rerenderAll();};});
   $$("[data-greset]",el).forEach(function(b){b.onclick=function(){delete bucket(S.grams)[b.dataset.greset]; save(); rerenderAll();};});
   $$("[data-cup]",el).forEach(function(b){b.onclick=function(){var l=dayLog(), i=+b.dataset.cup; l.water=(l.water===i+1)?i:i+1; save(); renderPlan();};});
