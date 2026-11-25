@@ -50,7 +50,16 @@ function defBasis(f){
   return "k";
 }
 var PIECES={FD0042:[50,"pcEgg"],FD0045:[10,"pcQegg"],FD0133:[28,"pcSlice"],FD0134:[28,"pcSlice"],FD0141:[9,"pcPiece"],FD0192:[8,"pcDate"],FD0191:[12,"pcRdate"],FD0161:[118,"pcBanana"],FD0162:[180,"pcApple"],FD0164:[150,"pcOrange"],FD0165:[75,"pcMand"],FD0176:[70,"pcKiwi"]};
-function pieceTxt(id,g){var p=PIECES[id]; if(!p) return ""; var n=Math.round(g/p[0]*2)/2; if(n<=0) return ""; return "≈ "+n+" "+T(p[1]);}
+/* household measures for carbs: grams per spoon / piece (approximate, the grams stay the reference) */
+var MEAS={FD0116:[8,"pcSpoon"],FD0117:[8,"pcSpoon"],FD0118:[28,"pcCup"],FD0119:[14,"pcCup"],FD0120:[12,"pcSpoon"],FD0121:[12,"pcSpoon"],FD0123:[12,"pcSpoon"],FD0124:[12,"pcSpoon"],
+  FD0125:[8,"pcSpoon"],FD0126:[8,"pcSpoon"],FD0127:[8,"pcSpoon"],FD0128:[10,"pcSpoon"],FD0129:[8,"pcSpoon"],
+  FD0130:[90,"pcLoaf"],FD0131:[60,"pcLoaf"],FD0132:[60,"pcLoaf"],FD0135:[35,"pcSlice"],FD0136:[40,"pcSlice"],FD0137:[100,"pcPiece"],FD0138:[45,"pcLoaf"],FD0139:[26,"pcLoaf"],FD0140:[32,"pcSlice"],
+  FD0142:[150,"pcPotato"],FD0143:[170,"pcPotato"],FD0144:[130,"pcSweetP"],FD0145:[115,"pcSweetP"],
+  FD0154:[4,"pcTsp"],FD0155:[4,"pcTsp"],FD0156:[21,"pcSpoon"],FD0157:[20,"pcSpoon"],FD0158:[20,"pcSpoon"],FD0159:[20,"pcSpoon"],FD0160:[20,"pcSpoon"]};
+var SPOON_SG={"أرز وحبوب مطهية":15,"مكرونة ونودلز":15,"بقوليات مطهية":15};
+function measure(id){ if(PIECES[id]) return PIECES[id]; if(MEAS[id]) return MEAS[id]; var f=F[id]; if(f&&SPOON_SG[f.sg]) return [SPOON_SG[f.sg],"pcSpoon"]; return null; }
+function pieceTxt(id,g,shop){var p=measure(id); if(!p) return ""; if(shop&&/^pc(Spoon|Tsp|Cup)$/.test(p[1])) return "";
+  var x=g/p[0], n=(p[1]==="pcSpoon"&&x>=5)?Math.round(x):Math.round(x*2)/2; if(n<=0) return ""; return "≈ "+n+" "+T(p[1]);}
 function dietOk(d,food){
   d=d||"all"; if(d==="all") return true;
   if(d==="vegan") return food.d==="vegan";
@@ -376,6 +385,7 @@ function dayCardHtml(){
 function renderPlan(){
   var p=dayPlan(), log=dayLog(), h="";
   if(S.client.editable) h+='<div class="muted" style="margin:4px 2px 0">'+T("editHint")+'</div>';
+  h+='<div class="muted" style="margin:4px 2px 0">'+T("spoonHint")+'</div>';
   (p.meals||[]).forEach(function(m,mi){
     var done=!!log.meals[S.dayType+":"+mi];
     h+='<div class="card'+(done?' done':'')+'"><div class="meal-head"><div class="t"><h3>'+esc(m.name)+'</h3>'+(m.time?'<span class="meal-time">🕒 '+esc(m.time)+'</span>':'')+'<span class="meal-kcal" data-mealk="'+mi+'"></span></div>'+
@@ -533,7 +543,7 @@ function renderShop(){
   var h='<div class="card"><div class="meal-head"><h3>'+T("shopT")+'</h3></div><p class="muted">'+T("shopP")+'</p>'+
     '<div class="pillset" id="shopDays">'+[1,3,5,7].map(function(d){return '<button type="button" class="pill'+(d===shopDays?' on':'')+'" data-d="'+d+'">'+T(d===1?"day1":"dayN",{n:d})+'</button>';}).join("")+'</div><div style="margin-top:10px">';
   ids.forEach(function(id){
-    var f=F[id], g=agg[id]*shopDays, txt=g>=1000?(r1(g/1000)+(f.u==="ml"?" "+T("uL"):" "+T("uKg"))):(r0(g)+" "+unit(f)), pc=pieceTxt(id,g);
+    var f=F[id], g=agg[id]*shopDays, txt=g>=1000?(r1(g/1000)+(f.u==="ml"?" "+T("uL"):" "+T("uKg"))):(r0(g)+" "+unit(f)), pc=pieceTxt(id,g,true);
     h+='<div class="shop-row"><span>'+esc(FN(f))+' <span class="badge state">'+esc(ST(f.s))+'</span></span><b>'+txt+(pc?' <small class="muted">('+pc+')</small>':'')+'</b></div>';
   });
   h+='</div><p class="muted" style="margin-top:10px">'+T("shopNote")+'</p></div>';

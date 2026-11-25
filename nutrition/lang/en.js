@@ -120,3 +120,6 @@
 
 /* weekly report */
 Object.assign(window.NL.en, {"dayDoneT": "Finish your day", "dayDone": "✅ Finish today", "dayDoneHint": "When your day is over, tap here to save it. After 7 saved days your weekly report appears automatically.", "daySaved": "Today is saved ✔", "dayReopen": "↩ Edit today again", "weekProg": "{n} of 7 days saved", "repT": "Weekly report", "repPeriod": "{a} → {b} · {n} days", "repAdh": "Meals eaten", "repAvg": "Daily average vs target", "repSwaps": "Most common swaps", "repNoSwaps": "No swaps this week", "repMissed": "Most missed meal", "repBest": "Best day", "repWeak": "Toughest day", "repNotes": "Notes", "nProtLow": "Protein was under target on {n} days", "nKcalHigh": "Calories were over target on {n} days", "nKcalLow": "Calories were well under target on {n} days — don't under-eat", "nWater": "Water: about {l} L a day", "nGreat": "Great week — keep it up! 💪", "repSend": "Send to coach on WhatsApp", "repClose": "Close", "repView": "📊 Last weekly report"});
+
+/* household measures */
+Object.assign(window.NL.en, {"pcSpoon": "tbsp", "pcTsp": "tsp", "pcCup": "cup", "pcLoaf": "loaf", "pcPotato": "medium potato", "pcSweetP": "medium sweet potato", "spoonHint": "🥄 Tablespoon = a normal eating spoon, full but not heaped (≈ 15 g cooked rice). Spoons are approximate — the grams are what count."});
