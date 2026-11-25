@@ -117,3 +117,6 @@
     SPB01: "Nitro-Tech Whey Gold — MuscleTech (Vanille)", SPB02: "Marine Collagen — Body Builder (Wassermelone)"
   }
 };
+
+/* weekly report */
+Object.assign(window.NL.de, {"dayDoneT": "Tag abschließen", "dayDone": "✅ Heute erledigt", "dayDoneHint": "Wenn dein Tag vorbei ist, tippe hier zum Speichern. Nach 7 gespeicherten Tagen erscheint dein Wochenbericht automatisch.", "daySaved": "Heute gespeichert ✔", "dayReopen": "↩ Heute nochmal bearbeiten", "weekProg": "{n} von 7 Tagen gespeichert", "repT": "Wochenbericht", "repPeriod": "{a} → {b} · {n} Tage", "repAdh": "Gegessene Mahlzeiten", "repAvg": "Tagesdurchschnitt vs. Ziel", "repSwaps": "Häufigste Tausche", "repNoSwaps": "Keine Tausche diese Woche", "repMissed": "Am häufigsten ausgelassen", "repBest": "Bester Tag", "repWeak": "Schwierigster Tag", "repNotes": "Hinweise", "nProtLow": "Protein lag an {n} Tagen unter dem Ziel", "nKcalHigh": "Kalorien lagen an {n} Tagen über dem Ziel", "nKcalLow": "Kalorien lagen an {n} Tagen deutlich unter dem Ziel — iss nicht zu wenig", "nWater": "Wasser: etwa {l} L pro Tag", "nGreat": "Starke Woche — weiter so! 💪", "repSend": "An den Coach per WhatsApp senden", "repClose": "Schließen", "repView": "📊 Letzter Wochenbericht"});

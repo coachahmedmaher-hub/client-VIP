@@ -77,13 +77,15 @@ function openVault(code){
 }
 
 /* ---------- state ---------- */
-var S={gender:null,code:null,client:null,dayType:"train",swaps:{},grams:{},manual:{},labels:{},opt:{},log:{},fu:{},tab:"plan"};
+var S={gender:null,code:null,client:null,dayType:"train",swaps:{},grams:{},manual:{},labels:{},opt:{},log:{},fu:{},closed:{},reports:[],tab:"plan"};
 var EXCL={};
 function skey(){return "amn:"+S.code;}
-function save(){store(skey(),{dayType:S.dayType,swaps:S.swaps,grams:S.grams,manual:S.manual,labels:S.labels,opt:S.opt,log:S.log,fu:S.fu});}
+function save(){store(skey(),{dayType:S.dayType,swaps:S.swaps,grams:S.grams,manual:S.manual,labels:S.labels,opt:S.opt,log:S.log,fu:S.fu,closed:S.closed,reports:S.reports});}
 function load(){var s=store(skey())||{};
   S.dayType=s.dayType||"train"; S.swaps=s.swaps||{}; S.grams=s.grams||{}; S.manual=s.manual||{}; S.labels=s.labels||{}; S.opt=s.opt||{}; S.log=s.log||{}; S.fu=s.fu||{};
   var keys=Object.keys(S.log).sort(); while(keys.length>14){delete S.log[keys.shift()];}
+  S.closed=s.closed||{}; S.reports=s.reports||[];
+  var ck=Object.keys(S.closed).sort(); while(ck.length>21){delete S.closed[ck.shift()];}
 }
 function dayLog(){var t=today(); if(!S.log[t]) S.log[t]={meals:{},water:0,supp:{}}; return S.log[t];}
 function rawDay(){var d=S.client.days||{}; return d[S.dayType]||d.train||d[Object.keys(d)[0]];}
@@ -281,6 +283,96 @@ function itemRow(mi,ii,it){
   '</div>';
 }
 function rerenderAll(){ renderPlan(); renderTotals(); renderShop(); }
+/* ---------- finished days + automatic weekly report ---------- */
+function snapDay(){   // what the client actually did today, saved when they tap "finish today"
+  var p=dayPlan(), log=dayLog(), TG=p.targets||S.client.targets||null, eat={k:0,p:0,c:0,f:0}, meals=[], sw=[];
+  (p.meals||[]).forEach(function(m,mi){
+    var on=!!log.meals[S.dayType+":"+mi], t={k:0,p:0,c:0,f:0};
+    m.items.forEach(function(it,ii){var e=effItem(mi,ii,it); if(!e) return; t.k+=e.m.k;t.p+=e.m.p;t.c+=e.m.c;t.f+=e.m.f; if(e.swapped&&e.src) sw.push([e.src.id,e.f.id]);});
+    if(on){eat.k+=t.k;eat.p+=t.p;eat.c+=t.c;eat.f+=t.f;}
+    meals.push({mi:mi,n:m.name,e:on?1:0});
+  });
+  return {d:today(),dk:S.dayType,eat:{k:r0(eat.k),p:r0(eat.p),c:r0(eat.c),f:r0(eat.f)},tg:TG?{k:TG.k,p:TG.p,c:TG.c,f:TG.f}:null,meals:meals,sw:sw,w:S.client.water_cups?(log.water||0):null};
+}
+function pendingDays(){ var used={}; S.reports.forEach(function(r){r.days.forEach(function(x){used[x.d]=1;});}); return Object.keys(S.closed).sort().filter(function(d){return !used[d];}); }
+function closeDay(){
+  S.closed[today()]=snapDay();
+  var pend=pendingDays();
+  if(pend.length>=7){
+    var days=pend.slice(0,7).map(function(d){return S.closed[d];});
+    S.reports.push({days:days}); while(S.reports.length>6) S.reports.shift();
+    S._rep=S.reports.length-1;
+  }
+  save(); renderPlan(); window.scrollTo({top:$("#t-plan").offsetTop-10,behavior:"smooth"});
+}
+function mealName(x){ var d=(S.client.days||{})[x.dk], m=d&&d.meals&&d.meals[x.mi]; return (m&&m.name)||x.n; }
+function repStats(r){
+  var D=r.days, st={n:D.length,from:D[0].d,to:D[D.length-1].d,eaten:0,total:0,avg:{k:0,p:0,c:0,f:0},tg:null,swaps:{},missed:{},protLow:0,kcalHigh:0,kcalLow:0,water:null,best:null,weak:null};
+  var tgs=D.filter(function(x){return x.tg;}), wsum=0, wn=0;
+  D.forEach(function(x){
+    var e=x.meals.filter(function(m){return m.e;}).length; st.eaten+=e; st.total+=x.meals.length;
+    ["k","p","c","f"].forEach(function(k){st.avg[k]+=x.eat[k]/D.length;});
+    x.meals.forEach(function(m){ if(!m.e){var nm=mealName({dk:x.dk,mi:m.mi,n:m.n}); st.missed[nm]=(st.missed[nm]||0)+1;} });
+    x.sw.forEach(function(s){var k=s[0]+">"+s[1]; st.swaps[k]=(st.swaps[k]||0)+1;});
+    if(x.tg){ if(x.eat.p<x.tg.p*0.9) st.protLow++; if(x.eat.k>x.tg.k*1.1) st.kcalHigh++; if(e>0&&x.eat.k<x.tg.k*0.8) st.kcalLow++; }
+    if(x.w!=null){wsum+=x.w;wn++;}
+    x._score=(x.meals.length?e/x.meals.length:0)-(x.tg?Math.abs(x.eat.k-x.tg.k)/x.tg.k*0.5:0);
+  });
+  if(tgs.length){ st.tg={k:0,p:0,c:0,f:0}; tgs.forEach(function(x){["k","p","c","f"].forEach(function(k){st.tg[k]+=x.tg[k]/tgs.length;});}); }
+  if(wn) st.water=r1(wsum/wn*0.25);
+  var sorted=D.slice().sort(function(a,b){return b._score-a._score;}); st.best=sorted[0]; st.weak=sorted[sorted.length-1];
+  st.pct=st.total?Math.round(st.eaten/st.total*100):0;
+  st.topSwaps=Object.keys(st.swaps).sort(function(a,b){return st.swaps[b]-st.swaps[a];}).slice(0,3).map(function(k){var a=k.split(">");return {a:F[a[0]],b:F[a[1]],n:st.swaps[k]};}).filter(function(x){return x.a&&x.b;});
+  var mk=Object.keys(st.missed).sort(function(a,b){return st.missed[b]-st.missed[a];}); st.topMissed=mk.length?{n:mk[0],c:st.missed[mk[0]]}:null;
+  return st;
+}
+function fmtD(d,l){ try{ return new Date(d+"T00:00:00").toLocaleDateString(l==="ar"?"ar-EG":l,{weekday:"short",day:"numeric",month:"short"}); }catch(e){ return d; } }
+function ARW(l){ return ((NL[l]||{})._dir==="rtl")?" ← ":" → "; }
+function TL(l,k,v){ var o=LANG; LANG=l; var s=T(k,v); LANG=o; return s; }
+function repNotes(st,l){
+  var n=[];
+  if(st.protLow) n.push(TL(l,"nProtLow",{n:st.protLow}));
+  if(st.kcalHigh) n.push(TL(l,"nKcalHigh",{n:st.kcalHigh}));
+  if(st.kcalLow) n.push(TL(l,"nKcalLow",{n:st.kcalLow}));
+  if(st.water!=null) n.push(TL(l,"nWater",{l:st.water}));
+  if(st.pct>=85&&!st.protLow&&!st.kcalHigh&&!st.kcalLow) n.push(TL(l,"nGreat"));
+  return n;
+}
+function repText(st){   // message to the coach: Arabic if the client uses Arabic, otherwise English
+  var l=LANG==="ar"?"ar":"en", L=[];
+  L.push("📊 "+TL(l,"repT")+" — "+(S.client.name||"")+" ("+S.code+")");
+  L.push(TL(l,"repPeriod",{a:fmtD(st.from,l),b:fmtD(st.to,l),n:st.n}));
+  L.push("✅ "+TL(l,"repAdh")+": "+st.eaten+"/"+st.total+" ("+st.pct+"%)");
+  var a=st.avg, t=st.tg;
+  L.push("🍽️ "+TL(l,"repAvg")+": "+r0(a.k)+(t?"/"+r0(t.k):"")+" "+TL(l,"kcal")+" · "+TL(l,"aP")+" "+r0(a.p)+(t?"/"+r0(t.p):"")+" · "+TL(l,"aC")+" "+r0(a.c)+(t?"/"+r0(t.c):"")+" · "+TL(l,"aF")+" "+r0(a.f)+(t?"/"+r0(t.f):""));
+  if(st.topSwaps.length) L.push("🔄 "+TL(l,"repSwaps")+": "+st.topSwaps.map(function(x){var o=LANG;LANG=l;var s=FN(x.a)+ARW(l)+FN(x.b)+" ×"+x.n;LANG=o;return s;}).join(" | "));
+  if(st.topMissed) L.push("⚠️ "+TL(l,"repMissed")+": "+st.topMissed.n+" ×"+st.topMissed.c);
+  L.push("⭐ "+TL(l,"repBest")+": "+fmtD(st.best.d,l)+" · "+TL(l,"repWeak")+": "+fmtD(st.weak.d,l));
+  repNotes(st,l).forEach(function(x){L.push("• "+x);});
+  return L.join("\n");
+}
+function repHtml(i){
+  var r=S.reports[i]; if(!r) return ""; var st=repStats(r), a=st.avg, t=st.tg;
+  function row(lbl,k,u){ var v=r0(a[k]), tv=t?r0(t[k]):null, off=t&&Math.abs(v-tv)>tv*0.1; return '<div class="rrow"><span>'+lbl+'</span><b'+(off?' class="off"':'')+'>'+v+(tv!=null?' <small>/ '+tv+'</small>':'')+' '+u+'</b></div>'; }
+  return '<div class="card report"><div class="meal-head"><h3>📊 '+T("repT")+'</h3><button type="button" class="eat" data-repclose>'+T("repClose")+'</button></div>'+
+    '<div class="muted">'+esc(T("repPeriod",{a:fmtD(st.from,LANG),b:fmtD(st.to,LANG),n:st.n}))+'</div>'+
+    '<div class="rbig"><b>'+st.pct+'%</b><span>'+T("repAdh")+' · '+st.eaten+'/'+st.total+'</span><i style="width:'+st.pct+'%"></i></div>'+
+    '<h4>'+T("repAvg")+'</h4>'+row(T("kcal"),"k","")+row(T("mPro"),"p","")+row(T("mCarb"),"c","")+row(T("mFat"),"f","")+
+    '<h4>'+T("repSwaps")+'</h4>'+(st.topSwaps.length?st.topSwaps.map(function(x){return '<div class="rrow"><span>'+esc(FN(x.a))+ARW(LANG)+esc(FN(x.b))+'</span><b>×'+x.n+'</b></div>';}).join(""):'<div class="muted">'+T("repNoSwaps")+'</div>')+
+    (st.topMissed?'<h4>'+T("repMissed")+'</h4><div class="rrow"><span>'+esc(st.topMissed.n)+'</span><b>×'+st.topMissed.c+'</b></div>':'')+
+    '<div class="rrow"><span>⭐ '+T("repBest")+'</span><b>'+esc(fmtD(st.best.d,LANG))+'</b></div><div class="rrow"><span>💪 '+T("repWeak")+'</span><b>'+esc(fmtD(st.weak.d,LANG))+'</b></div>'+
+    '<h4>'+T("repNotes")+'</h4><ul class="rnotes">'+repNotes(st,LANG).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+
+    '<a class="btn wa-send" target="_blank" rel="noopener" href="https://wa.me/'+WA+'?text='+encodeURIComponent(repText(st))+'">'+T("repSend")+'</a></div>';
+}
+function dayCardHtml(){
+  var done=!!S.closed[today()], n=pendingDays().length;
+  var h='<div class="card daycard"><div class="meal-head"><h3>'+(done?T("daySaved"):T("dayDoneT"))+'</h3><span class="meal-kcal">'+T("weekProg",{n:n})+'</span></div>'+
+    '<div class="dots">'+[0,1,2,3,4,5,6].map(function(i){return '<i class="'+(i<n?"on":"")+'"></i>';}).join("")+'</div>';
+  h+= done ? (pendingDays().indexOf(today())>-1?'<button type="button" class="eat" data-reopen>'+T("dayReopen")+'</button>':'')
+           : '<p class="muted" style="margin:8px 0">'+T("dayDoneHint")+'</p><button type="button" class="btn daybtn" data-closeday>'+T("dayDone")+'</button>';
+  if(S.reports.length) h+='<button type="button" class="eat" style="margin-inline-start:8px" data-repview>'+T("repView")+'</button>';
+  return h+'</div>';
+}
 function renderPlan(){
   var p=dayPlan(), log=dayLog(), h="";
   if(S.client.editable) h+='<div class="muted" style="margin:4px 2px 0">'+T("editHint")+'</div>';
@@ -297,7 +389,13 @@ function renderPlan(){
     for(var i=0;i<cups;i++) cupsH+='<button type="button" class="cup'+(i<w?' on':'')+'" data-cup="'+i+'" aria-label="'+T("cup",{n:i+1})+'"></button>';
     h+='<div class="card"><div class="meal-head"><h3>'+T("waterT")+'</h3><span class="meal-kcal">'+T("waterL",{w:w,c:cups,l:r1(w*0.25)})+'</span></div><div class="water">'+cupsH+'</div></div>';
   }
+  h+=dayCardHtml();
+  if(S._rep!=null&&S.reports[S._rep]) h=repHtml(S._rep)+h;
   var el=$("#t-plan"); el.innerHTML=h;
+  $$("[data-closeday]",el).forEach(function(b){b.onclick=closeDay;});
+  $$("[data-reopen]",el).forEach(function(b){b.onclick=function(){ var used=pendingDays().indexOf(today())>-1; if(used){delete S.closed[today()]; save(); renderPlan();} };});
+  $$("[data-repview]",el).forEach(function(b){b.onclick=function(){S._rep=S.reports.length-1; renderPlan(); window.scrollTo({top:$("#t-plan").offsetTop-10,behavior:"smooth"});};});
+  $$("[data-repclose]",el).forEach(function(b){b.onclick=function(){S._rep=null; renderPlan();};});
   $$("[data-eat]",el).forEach(function(b){b.onclick=function(){var k=S.dayType+":"+b.dataset.eat, l=dayLog(); if(l.meals[k]) delete l.meals[k]; else l.meals[k]=1; save(); renderPlan(); renderTotals();};});
   $$("[data-swap]",el).forEach(function(b){b.onclick=function(){var a=b.dataset.swap.split("-"); openSwap(+a[0],+a[1]);};});
   $$("[data-var]",el).forEach(function(b){b.onclick=function(){

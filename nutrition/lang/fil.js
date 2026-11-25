@@ -117,3 +117,6 @@
     SPB01: "Nitro-Tech Whey Gold — MuscleTech (Vanilla)", SPB02: "Marine Collagen — Body Builder (Pakwan)"
   }
 };
+
+/* weekly report */
+Object.assign(window.NL.fil, {"dayDoneT": "Tapusin ang araw mo", "dayDone": "✅ Tapos na ngayon", "dayDoneHint": "Kapag tapos na ang araw mo, pindutin ito para ma-save. Pagkatapos ng 7 naka-save na araw, lalabas nang kusa ang lingguhang report.", "daySaved": "Na-save na ngayon ✔", "dayReopen": "↩ I-edit ulit ngayon", "weekProg": "{n} sa 7 araw ang naka-save", "repT": "Lingguhang report", "repPeriod": "{a} → {b} · {n} araw", "repAdh": "Mga kinaing meal", "repAvg": "Average bawat araw vs target", "repSwaps": "Pinakamadalas na kapalit", "repNoSwaps": "Walang kapalit ngayong linggo", "repMissed": "Pinakamadalas na nalaktawang meal", "repBest": "Pinakamagandang araw", "repWeak": "Pinakamahirap na araw", "repNotes": "Mga tala", "nProtLow": "Kulang sa protein target ng {n} araw", "nKcalHigh": "Lampas sa calorie target ng {n} araw", "nKcalLow": "Masyadong mababa sa calorie target ng {n} araw — huwag sobrang magbawas", "nWater": "Tubig: mga {l} L bawat araw", "nGreat": "Napakagandang linggo — ituloy mo! 💪", "repSend": "Ipadala sa coach sa WhatsApp", "repClose": "Isara", "repView": "📊 Huling lingguhang report"});

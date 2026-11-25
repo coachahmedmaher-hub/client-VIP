@@ -117,3 +117,6 @@
     SPB01: "Nitro-Tech Whey Gold — MuscleTech (ونیلا)", SPB02: "Marine Collagen — Body Builder (تربوز)"
   }
 };
+
+/* weekly report */
+Object.assign(window.NL.ur, {"dayDoneT": "اپنا دن مکمل کریں", "dayDone": "✅ آج مکمل", "dayDoneHint": "دن ختم ہو تو یہاں دبائیں تاکہ محفوظ ہو جائے۔ 7 محفوظ دنوں کے بعد ہفتہ وار رپورٹ خود آ جائے گی۔", "daySaved": "آج محفوظ ہو گیا ✔", "dayReopen": "↩ آج دوبارہ ایڈٹ کریں", "weekProg": "7 میں سے {n} دن محفوظ", "repT": "ہفتہ وار رپورٹ", "repPeriod": "{a} ← {b} · {n} دن", "repAdh": "کھائے گئے کھانے", "repAvg": "روزانہ اوسط بمقابلہ ہدف", "repSwaps": "سب سے زیادہ تبادلے", "repNoSwaps": "اس ہفتے کوئی تبادلہ نہیں", "repMissed": "سب سے زیادہ چھوٹا کھانا", "repBest": "بہترین دن", "repWeak": "مشکل ترین دن", "repNotes": "نوٹس", "nProtLow": "{n} دن پروٹین ہدف سے کم رہا", "nKcalHigh": "{n} دن کیلوریز ہدف سے زیادہ رہیں", "nKcalLow": "{n} دن کیلوریز ہدف سے کافی کم رہیں — بہت کم نہ کھائیں", "nWater": "پانی: روزانہ تقریباً {l} لیٹر", "nGreat": "زبردست ہفتہ — ایسے ہی جاری رکھیں! 💪", "repSend": "واٹس ایپ پر کوچ کو بھیجیں", "repClose": "بند کریں", "repView": "📊 آخری ہفتہ وار رپورٹ"});

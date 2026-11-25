@@ -117,3 +117,6 @@
     SPB01: "Nitro-Tech Whey Gold — MuscleTech (Vanille)", SPB02: "Marine Collagen — Body Builder (Pastèque)"
   }
 };
+
+/* weekly report */
+Object.assign(window.NL.fr, {"dayDoneT": "Terminez votre journée", "dayDone": "✅ Journée terminée", "dayDoneHint": "Quand votre journée est finie, appuyez ici pour l'enregistrer. Après 7 jours enregistrés, votre bilan hebdomadaire apparaît automatiquement.", "daySaved": "Journée enregistrée ✔", "dayReopen": "↩ Modifier aujourd'hui", "weekProg": "{n} jours sur 7 enregistrés", "repT": "Bilan hebdomadaire", "repPeriod": "{a} → {b} · {n} jours", "repAdh": "Repas pris", "repAvg": "Moyenne par jour vs objectif", "repSwaps": "Échanges les plus fréquents", "repNoSwaps": "Aucun échange cette semaine", "repMissed": "Repas le plus sauté", "repBest": "Meilleur jour", "repWeak": "Jour le plus difficile", "repNotes": "Remarques", "nProtLow": "Protéines sous l'objectif {n} jours", "nKcalHigh": "Calories au-dessus de l'objectif {n} jours", "nKcalLow": "Calories bien en dessous de l'objectif {n} jours — ne mangez pas trop peu", "nWater": "Eau : environ {l} L par jour", "nGreat": "Super semaine — continuez ! 💪", "repSend": "Envoyer au coach sur WhatsApp", "repClose": "Fermer", "repView": "📊 Dernier bilan hebdomadaire"});
